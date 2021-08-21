@@ -6,6 +6,24 @@ import sys
 import os
 from pathlib import Path
 
+# What does the names of our C API tarball/zip files looks like
+# os: win, linux, osx
+# ep: cuda, tensorrt, None
+def get_package_name(os, cpu_arch, ep):
+    pkg_name = None
+    if os == 'win':
+        pkg_name = "onnxruntime-win-"
+    elif os == 'linux':
+        pkg_name = "onnxruntime-linux-"
+    elif os == 'osx':
+        pkg_name = "onnxruntime-osx-"
+    if ep == 'cuda':
+        pkg_name += "gpu-"
+    elif ep == 'tensorrt'
+        pkg_name += "tensorrt-"
+    pkg_name += cpu_arch
+    return pkg_name
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description="ONNX Runtime create nuget spec script "
                                                  "(for hosting native shared library artifacts)",
@@ -306,35 +324,39 @@ def generate_files(list, args):
     # Process onnxruntime import lib, dll, and pdb
     if is_windows_build:
         nuget_artifacts_dir = Path(args.native_build_path) / 'nuget-artifacts'
-        if nuget_artifacts_dir.exists():
-            # Code path for ADO build pipeline, the files under 'nuget-artifacts' are downloaded from other build jobs
-            for child in nuget_artifacts_dir.iterdir():
-                for cpu_arch in ['x86', 'x64', 'arm', 'arm64']:
-                    if child.name == 'onnxruntime-win-%s' % cpu_arch:
-                        child = child / 'lib'
-                        for child_file in child.iterdir():
-                            if child_file.suffix in ['.dll','.pdb','.lib']:                                 
-                                files_list.append('<file src="' + str(child_file) +
-                                       '" target="runtimes/win-%s/native"/>' % cpu_arch)
-                for cpu_arch in ['x86_64', 'arm64']:
-                    if child.name == 'onnxruntime-osx-%s' % cpu_arch:
-                        child = child / 'lib'
-                        if cpu_arch == 'x86_64':
-                            cpu_arch = 'x64'
-                        for child_file in child.iterdir():
-                            if child_file.is_file() and not child_file.is_symlink() and child_file.suffix == '.dylib':
-                                files_list.append('<file src="' + str(child_file) +
-                                       '" target="runtimes/osx.10.14-%s/native/libonnxruntime.dylib"/>' % cpu_arch)
-                for cpu_arch in ['x64','aarch64']:
-                    if child.name == 'onnxruntime-linux-%s' % cpu_arch:
-                        child = child / 'lib'
-                        if cpu_arch == 'x86_64':
-                            cpu_arch = 'x64'
-                        for child_file in child.iterdir():
-                            if child_file.is_file() and child_file.suffix == '.so':
-                                files_list.append('<file src="' + str(child_file) +
-                                       '" target="runtimes/linux-%s/native/libonnxruntime.so"/>' % cpu_arch)
-
+        if is_cuda_gpu_package:
+            ep_list = ['tensorrt', 'cuda']
+        else:
+            ep_list = [None]
+        for ep in ep_list:
+            if nuget_artifacts_dir.exists():
+                # Code path for ADO build pipeline, the files under 'nuget-artifacts' are downloaded from other build jobs
+                for child in nuget_artifacts_dir.iterdir():
+                    for cpu_arch in ['x86', 'x64', 'arm', 'arm64']:
+                        if child.name == get_package_name('win', cpu_arch, ep):
+                            child = child / 'lib'
+                            for child_file in child.iterdir():
+                                if child_file.suffix in ['.dll','.pdb','.lib']:                                 
+                                    files_list.append('<file src="' + str(child_file) +
+                                           '" target="runtimes/win-%s/native"/>' % cpu_arch)
+                    for cpu_arch in ['x86_64', 'arm64']:
+                        if child.name == get_package_name('osx', cpu_arch, ep):
+                            child = child / 'lib'
+                            if cpu_arch == 'x86_64':
+                                cpu_arch = 'x64'
+                            for child_file in child.iterdir():
+                                if child_file.is_file() and not child_file.is_symlink() and child_file.suffix == '.dylib':
+                                    files_list.append('<file src="' + str(child_file) +
+                                           '" target="runtimes/osx.10.14-%s/native/libonnxruntime.dylib"/>' % cpu_arch)
+                    for cpu_arch in ['x64','aarch64']:
+                        if child.name == get_package_name('linux', cpu_arch, ep):
+                            child = child / 'lib'
+                            if cpu_arch == 'x86_64':
+                                cpu_arch = 'x64'
+                            for child_file in child.iterdir():
+                                if child_file.is_file() and child_file.suffix == '.so':
+                                    files_list.append('<file src="' + str(child_file) +
+                                           '" target="runtimes/linux-%s/native/libonnxruntime.so"/>' % cpu_arch)
                 
         else:
             # Code path for local dev build
