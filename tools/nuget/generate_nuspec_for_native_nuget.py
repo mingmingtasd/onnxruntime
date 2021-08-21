@@ -12,17 +12,24 @@ from pathlib import Path
 # ep: cuda, tensorrt, None
 def get_package_name(os, cpu_arch, ep):
     pkg_name = None
+    # It is a bit confusing. Windows packages put cpu arch in front of EP name
+    # But Linux put EP name first. 
     if os == 'win':
         pkg_name = "onnxruntime-win-"
+        if ep == 'cuda':
+            pkg_name += "gpu-"
+        elif ep == 'tensorrt':
+            pkg_name += "tensorrt-"
+        pkg_name += cpu_arch
     elif os == 'linux':
         pkg_name = "onnxruntime-linux-"
+        pkg_name += cpu_arch
+        if ep == 'cuda':
+            pkg_name += "gpu-"
+        elif ep == 'tensorrt':
+            pkg_name += "tensorrt-"
     elif os == 'osx':
         pkg_name = "onnxruntime-osx-"
-    if ep == 'cuda':
-        pkg_name += "gpu-"
-    elif ep == 'tensorrt':
-        pkg_name += "tensorrt-"
-    pkg_name += cpu_arch
     return pkg_name
 
 
