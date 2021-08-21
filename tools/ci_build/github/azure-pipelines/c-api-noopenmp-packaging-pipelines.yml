@@ -25,7 +25,7 @@ jobs:
 - job: NuGet_Packaging_GPU
   workspace:
     clean: all
-  pool: 'Win-CPU-2021'
+  pool: 'chasuntest'
   variables:
     breakCodesignValidationInjection: ${{ parameters.DoEsrp }}
   condition: succeeded()
@@ -217,8 +217,4 @@ jobs:
   - template: templates/component-governance-component-detection-steps.yml
     parameters :
       condition : 'succeeded'
-
-  - task: mspremier.PostBuildCleanup.PostBuildCleanup-task.PostBuildCleanup@3
-    displayName: 'Clean Agent Directories'
-    condition: always()
 
