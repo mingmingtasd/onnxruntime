@@ -334,7 +334,7 @@ def generate_files(list, args):
     if is_windows_build:
         nuget_artifacts_dir = Path(args.native_build_path) / 'nuget-artifacts'
         if is_cuda_gpu_package:
-            ep_list = ['tensorrt', 'cuda']
+            ep_list = ['tensorrt', 'cuda', None]
         else:
             ep_list = [None]
         for ep in ep_list:
