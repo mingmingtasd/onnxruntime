@@ -38,5 +38,6 @@ foreach ($ort_dir in $ort_dirs)
   $dirname = Split-Path -Path $ort_dir -Leaf
   $dirname = $dirname.SubString(0,$dirname.LastIndexOf('-'))
   Write-Output "Renaming to $dirname"
-  Rename-Item -Path $ort_dir -NewName $Env:BUILD_BINARIESDIRECTORY\RelWithDebInfo\RelWithDebInfo\nuget-artifacts\$dirname
+  Rename-Item -Path $ort_dir -NewName $Env:BUILD_BINARIESDIRECTORY\RelWithDebInfo\RelWithDebInfo\nuget-artifacts\$dirname  
 }
+
