@@ -9,7 +9,7 @@ a) ARTIFACT_NAME=${OPTARG};;
 c) BUILD_CONFIG=${OPTARG};;
 l) LIB_NAME=${OPTARG};;
 n) NATIVE_LIB_NAME=${OPTARG};;
-h) ARCH=${OPTARG};;
+h) ARCH=${OPTARG};; #must match the JAVA_OS_ARCH variable in onnxruntime_java.cmake
 v) VERSION_NUMBER=${OPTARG};;
 esac
 done
