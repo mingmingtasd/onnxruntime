@@ -19,6 +19,9 @@ EXIT_CODE=1
 uname -a
 
 echo "Version: $VERSION_NUMBER"
+if [[ $LIB_NAME == *.dylib ]] && [[ $ARCH == 'x86_64' ]]; then
+	ARCH = 'x64'
+fi
 NATIVE_FOLDER=ai/onnxruntime/native/$ARCH
 
 mkdir -p $BINARY_DIR/$ARTIFACT_NAME/$NATIVE_FOLDER
