@@ -24,13 +24,13 @@ def get_package_name(os, cpu_arch, ep):
         pkg_name += cpu_arch
     elif os == 'linux':
         pkg_name = "onnxruntime-linux-"
-        pkg_name += cpu_arch + "-"
+        pkg_name += cpu_arch
         if ep == 'cuda':
-            pkg_name += "gpu"
+            pkg_name += "-gpu"
         elif ep == 'tensorrt':
-            pkg_name += "gpu-tensorrt"
+            pkg_name += "-gpu-tensorrt"
     elif os == 'osx':
-        pkg_name = "onnxruntime-osx-"
+        pkg_name = "onnxruntime-osx-" + cpu_arch
     return pkg_name
 
 # Currently we take onnxruntime_providers_cuda from CUDA build
