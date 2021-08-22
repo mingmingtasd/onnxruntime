@@ -50,7 +50,7 @@ def generate_file_list_for_ep(nuget_artifacts_dir, ep, files_list):
                 if cpu_arch == 'x86_64':
                     cpu_arch = 'x64'
                 for child_file in child.iterdir():
-                    if child_file.is_file() and child_file.suffix == '.dylib' and not re.match(r'.*[\.\d+]+\.dylib$', name):
+                    if child_file.is_file() and child_file.suffix == '.dylib' and not re.match(r'.*[\.\d+]+\.dylib$', child_file.name):
                         files_list.append('<file src="' + str(child_file) +
                                           '" target="runtimes/osx.10.14-%s/native"/>' % cpu_arch)
         for cpu_arch in ['x64', 'aarch64']:
