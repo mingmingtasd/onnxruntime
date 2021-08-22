@@ -829,7 +829,7 @@ if(APPLE)
     endif()
 else()
     set(CPUINFO_SUPPORTED TRUE)
-    if(MSVC AND (( ${onnxruntime_target_platform}  MATCHES "^(ARM.*|arm.*)$" ))
+    if(MSVC AND ( ${onnxruntime_target_platform}  MATCHES "^(ARM.*|arm.*)$" ))
         message(WARNING
         "Cpuinfo not included for compilation problems with Windows ARM.")
         set(CPUINFO_SUPPORTED FALSE)
