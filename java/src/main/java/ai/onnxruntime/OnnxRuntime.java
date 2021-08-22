@@ -101,9 +101,6 @@ final class OnnxRuntime {
     String arch = System.getProperty("os.arch", "generic").toLowerCase(Locale.ENGLISH);
     if (arch.startsWith("amd64")){
       detectedArch = "x64";
-    } else if (arch.startsWith("x86")) {
-      // 32-bit x86 is not supported by the Java API
-      detectedArch = "x86";
     } else if (arch.startsWith("x86_64")) {
       detectedArch = "x86_64";
     } else if (arch.startsWith("arm64")) {
