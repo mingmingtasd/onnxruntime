@@ -140,7 +140,7 @@ jobs:
       
     - template: mac-packaging.yml
       parameters :
-        AdditionalBuildFlags : ${{ parameters.AdditionalBuildFlags }} --cmake_extra_defines CMAKE_OSX_ARCHITECTURES=arm64
+        AdditionalBuildFlags : ${{ parameters.AdditionalBuildFlags }} --build_java --cmake_extra_defines CMAKE_OSX_ARCHITECTURES=arm64
         MacosArch: arm64
         
     - template: mac-packaging.yml
@@ -150,7 +150,7 @@ jobs:
 
     - template: mac-packaging.yml
       parameters :
-        AdditionalBuildFlags : ${{ parameters.AdditionalBuildFlags }}
+        AdditionalBuildFlags : ${{ parameters.AdditionalBuildFlags }} --build_java
         MacosArch: x86_64
 
     - task: PublishPipelineArtifact@1

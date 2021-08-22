@@ -11,7 +11,7 @@ parameters:
 steps:     
     - script: |
         rm -rf $(Build.BinariesDirectory)/Release
-        python3 $(Build.SourcesDirectory)/tools/ci_build/build.py --update --build --build_java ${{ parameters.AdditionalBuildFlags }} --build_dir $(Build.BinariesDirectory) --skip_submodule_sync --parallel --build_shared_lib --config Release
+        python3 $(Build.SourcesDirectory)/tools/ci_build/build.py --update --build  ${{ parameters.AdditionalBuildFlags }} --build_dir $(Build.BinariesDirectory) --skip_submodule_sync --parallel --build_shared_lib --config Release
       displayName: 'Build ${{ parameters.MacosArch }}'
 
     - task: ShellScript@2
@@ -37,11 +37,12 @@ steps:
       displayName: 'Copy libcustom_op_library.dylib to ArtifactStagingDirectory'
       condition: and(succeeded(), eq('${{ parameters.MacosArch }}', 'x86_64'))
 
-    - template: java-api-artifacts-package-and-publish-steps-posix.yml
-      parameters:
-          arch: 'osx-${{ parameters.MacosArch }}'
-          buildConfig: 'Release'
-          artifactName: 'onnxruntime-java-osx-${{ parameters.MacosArch }}'
-          version: '$(OnnxRuntimeVersion)'
-          libraryName: 'libonnxruntime.dylib'
-          nativeLibraryName: 'libonnxruntime4j_jni.dylib'
+    - ${{ if ne(parameters.MacosArch, 'universal2') }}:
+        - template: java-api-artifacts-package-and-publish-steps-posix.yml
+          parameters:
+              arch: 'osx-${{ parameters.MacosArch }}'
+              buildConfig: 'Release'
+              artifactName: 'onnxruntime-java-osx-${{ parameters.MacosArch }}'
+              version: '$(OnnxRuntimeVersion)'
+              libraryName: 'libonnxruntime.dylib'
+              nativeLibraryName: 'libonnxruntime4j_jni.dylib'
