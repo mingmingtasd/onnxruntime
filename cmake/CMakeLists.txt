@@ -829,10 +829,11 @@ if(APPLE)
     endif()
 else()
     set(CPUINFO_SUPPORTED TRUE)
-    if(MSVC AND ( ${onnxruntime_target_platform}  MATCHES "^(ARM.*|arm.*)$" ))
-        message(WARNING
-        "Cpuinfo not included for compilation problems with Windows ARM.")
-        set(CPUINFO_SUPPORTED FALSE)
+    if(WIN32)
+		if( ${onnxruntime_target_platform}  MATCHES "^(ARM.*|arm.*)$" ))
+			message(WARNING "Cpuinfo not included for compilation problems with Windows ARM.")
+			set(CPUINFO_SUPPORTED FALSE)
+		endif()
 	elseif(NOT ${onnxruntime_target_platform} MATCHES "^(i[3-6]86|AMD64|x86(_64)?|armv[5-8].*|aarch64|arm64)$")
         message(WARNING
         "Target processor architecture \"${onnxruntime_target_platform}\" is not supported in cpuinfo. "
