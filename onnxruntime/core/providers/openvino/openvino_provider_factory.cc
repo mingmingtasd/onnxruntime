@@ -113,7 +113,7 @@ std::string ParsePrecision(const ProviderOptions& provider_options, std::string&
   using foo = std::pair<DefaultValue, ValidValues>;
   using ParserHelper = std::map<DeviceName, foo>;
   ParserHelper helper = {
-      {"GPU", {"FP16", {"FP16", "FP32"}}},
+      {"GPU", {"FP16", {"FP16", "FP32", "ACCURACY"}}},
       {"NPU", {"FP16", {"FP16"}}},
       {"CPU", {"FP32", {"FP32"}}},
   };
