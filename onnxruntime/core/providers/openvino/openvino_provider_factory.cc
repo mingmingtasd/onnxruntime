@@ -183,6 +183,7 @@ struct OpenVINO_Provider : Provider {
     }
 
     pi.precision = OpenVINOParserUtils::ParsePrecision(provider_options, pi.device_type, "precision");
+    LOGS_DEFAULT(WARNING)<< "Precision: " << pi.precision;
 
     if (provider_options.contains("load_config")) {
       auto parse_config = [&](const std::string& config_str) -> std::map<std::string, ov::AnyMap> {

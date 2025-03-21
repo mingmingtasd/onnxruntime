@@ -16,8 +16,8 @@ std::string OpenVINOParserUtils::ParsePrecision(const ProviderOptions& provider_
 
   ParserHelper helper = {
       {"GPU", {"FP16", {"FP16", "FP32", "ACCURACY"}}},
-      {"NPU", {"FP16", {"FP16", "ACCURACY"}}},
-      {"CPU", {"FP32", {"FP32", "ACCURACY"}}},
+      {"NPU", {"FP16", {"FP16","FP32", "ACCURACY"}}},
+      {"CPU", {"FP32", {"FP32", "FP16","ACCURACY"}}},
   };
 
   std::set<std::string> deprecated_device_types = {

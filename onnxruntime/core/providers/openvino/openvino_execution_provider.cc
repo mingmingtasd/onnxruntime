@@ -79,7 +79,7 @@ OpenVINOExecutionProvider::OpenVINOExecutionProvider(const ProviderInfo& info, s
               device_found = true;
               break;
             }
-            if (info.device_type == "CPU" && (info.precision == "FP32")) {
+            if (info.device_type == "CPU" ) {
               device_found = true;
               break;
             }
